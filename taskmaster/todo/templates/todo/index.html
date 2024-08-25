@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Task Master</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            background-color: #95f0df;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #00ffcc;
+        }
+
+        .gear-icon {
+            font-size: 3em;
+            margin-right: 20px;
+            color: #00ffcc;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            background: #282c34;
+            margin-bottom: 5%;
+            border-radius: 15px;
+            padding: 2%;
+            transition: background 0.3s, box-shadow 0.3s;
+            position: relative;
+            color: #fcfafa;
+        }
+
+        .card:hover {
+            background: #15171a;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.3),
+                0 12px 40px 0 rgba(0, 0, 0, 0.29);
+        }
+
+        .submit_form {
+            text-align: center;
+            padding: 3%;
+            background: #d0fafa;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            color: #88888b;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #00ffcc;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .dark-mode {
+            background-color: #181a1b;
+            color: #fff;
+        }
+
+        .dark-mode .header {
+            background-color: #222;
+            color: #00ffcc;
+        }
+
+        .dark-mode .card {
+            background: #333;
+            color: #00ffcc;
+        }
+
+        .dark-mode .submit_form {
+            background: #222;
+        }
+
+        .dark-mode .slider {
+            background-color: #555;
+        }
+
+        .dark-mode .slider:before {
+            background-color: #00ffcc;
+        }
+
+        /* Developer-themed customizations */
+        .code-snippet {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            padding: 5px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .engineer-footer {
+            font-size: 1.2em;
+            text-align: center;
+            margin-top: 20px;
+            color: #00ffcc;
+        }
+
+        .engineer-footer img {
+            width: 40px;
+            height: auto;
+            margin: 0 10px;
+
+
+        }
+    </style>
+
+    <!-- JavaScript for Dark Mode -->
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
+
+</head>
+
+<body class="container-fluid">
+
+    <!-- Header with Title and Dark Mode Toggle -->
+    <div class="header">
+        <span class="gear-icon">⚙️</span>
+        <h1>Task Master</h1>
+        <label class="toggle-switch">
+            <input type="checkbox" onclick="toggleDarkMode()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info">
+        <strong>{{message}}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {% for i in list %}
+            <div class="card">
+                <center><b>{{i.title}}</b></center>
+                <hr />
+                {{i.date}}
+                <hr />
+                {{i.details}}
+                <div class="code-snippet">
+                    <pre>{{i.code_snippet}}</pre>
+                </div>
+                <br />
+                <form action="/del/{{i.id}}" method="POST" style="padding-right: 4%; padding-bottom: 3%;">
+                    {% csrf_token %}
+                    <button value="remove" type="submit" class="btn btn-primary" style="float: right;">
+                        <span class="glyphicon glyphicon-trash"></span> &nbsp; remove
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <div class="submit_form">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{forms}}
+                    <center>
+                        <input type="submit" class="btn btn-default" value="Submit" />
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer-themed Footer -->
+    <div class="engineer-footer">
+        <p>Built for Engineers by Engineers 🛠️</p>
+        <p>Together We'll Never Forget Anything!!!</p>
+    </div>
+
+</body>
+
+</html>
