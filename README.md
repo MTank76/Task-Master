@@ -57,6 +57,7 @@ Task Master is a dynamic and vibrant ToDo web app built with Django, designed sp
 - **Add Task:** Click on "Add Task" to create a new task, set a deadline, and assign a priority level.
 - **Edit Task:** Modify existing tasks by selecting them from the list.
 - **View Tasks:** Use the customizable views to see tasks by day, week, or project.
+- **Code Snippets:** You can enhance productivity by seamlessly adding, managing, and referencing code snippets directly within your tasks.
 
 ## Contributing
 
